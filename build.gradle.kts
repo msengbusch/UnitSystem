@@ -2,8 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version("1.5.30")
-
-    id("org.jetbrains.kotlin.kapt") version("1.5.30")
 }
 
 allprojects {
@@ -30,17 +28,11 @@ allprojects {
             archiveClassifier.set("dev")
         }
     }
-
-    if(pluginManager.hasPlugin("org.jetbrains.kotlin.kapt")) {
-        kapt {
-            includeCompileClasspath = false
-        }
-    }
 }
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 }
 
 tasks {
