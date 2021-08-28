@@ -36,6 +36,10 @@ dependencies {
 }
 
 tasks {
+    named("build") {
+        dependsOn(named("jar"))
+    }
+
     getByName<Test>("test") {
         useJUnitPlatform()
     }
