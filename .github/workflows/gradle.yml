@@ -27,10 +27,12 @@ jobs:
           .gradle
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: ${{ runner.os }}-gradle-
-      
+
     - name: Build
       run: ./gradlew build --info --stacktrace --scan
-      
+      env:
+        BUILD_NUMBER: ${{ github.run_number }}
+
     - name: Artifact
       uses: actions/upload-artifact@v2.2.4
       with:
