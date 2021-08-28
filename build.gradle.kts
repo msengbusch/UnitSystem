@@ -1,14 +1,25 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version("1.5.30")
+    kotlin("jvm") version ("1.5.30")
 }
+
+val buildRelease = providers.environmentVariable("BUILD_RELEASE").forUseAtConfigurationTime()
+val buildNumber = providers.environmentVariable("BUILD_NUMBER").forUseAtConfigurationTime()
 
 allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = "msengbusch.github.io"
-    version = "0.1.0-SNAPSHOT"
+    version = "0.1.0"
+
+    if (buildNumber.isPresent) {
+        version = version as String + "-" + buildNumber.get()
+    }
+
+    if (!buildRelease.isPresent) {
+        version = version as String + "-SNAPSHOT"
+    }
 
     repositories {
         mavenCentral()
