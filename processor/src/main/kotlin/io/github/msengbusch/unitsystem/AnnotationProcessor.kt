@@ -3,22 +3,16 @@ package io.github.msengbusch.unitsystem
 import com.google.auto.service.AutoService
 import io.github.msengbusch.unitsystem.context.OutputContext
 import io.github.msengbusch.unitsystem.context.ProcessContext
-import io.github.msengbusch.unitsystem.context.ScanContext
 import io.github.msengbusch.unitsystem.step.AnnotationStep
 import io.github.msengbusch.unitsystem.step.Step
 import io.github.msengbusch.unitsystem.steps.event.UnitEventStep
 import io.github.msengbusch.unitsystem.steps.unit.UnitStep
 import io.github.msengbusch.unitsystem.util.fatal
-import java.io.BufferedReader
-import java.io.InputStreamReader
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
-import javax.tools.StandardLocation
-import kotlin.io.path.Path
-import kotlin.io.path.name
 
 @AutoService(Processor::class)
 class AnnotationProcessor : AbstractProcessor() {
@@ -37,7 +31,6 @@ class AnnotationProcessor : AbstractProcessor() {
         UnitStep()
     )
 
-    private val scanContext = ScanContext()
     private val processContext = ProcessContext()
     private val outputContext = OutputContext()
 
@@ -63,19 +56,19 @@ class AnnotationProcessor : AbstractProcessor() {
 
     private fun scanSteps(roundEnv: RoundEnvironment) {
         steps.forEach { step ->
-            step.scan(roundEnv, processingEnv, scanContext)
+            step.scan(roundEnv, processingEnv, processContext)
         }
     }
 
     private fun processSteps() {
         steps.forEach { step ->
-            step.process(processingEnv, scanContext, processContext)
+            step.process(processingEnv, processContext)
         }
     }
 
     private fun outputSteps() {
         steps.forEach { step ->
-            step.output(processingEnv, scanContext, processContext, outputContext)
+            step.output(processingEnv, processContext, outputContext)
         }
     }
 }
