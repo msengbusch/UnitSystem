@@ -1,55 +1,81 @@
 package io.github.msengbusch.unitsystem
 
 import com.google.auto.service.AutoService
-import io.github.msengbusch.unitsystem.declaration.UnitDeclaration
-import io.github.msengbusch.unitsystem.output.UnitFile
-import io.github.msengbusch.unitsystem.processor.UnitProcessor
+import io.github.msengbusch.unitsystem.context.OutputContext
+import io.github.msengbusch.unitsystem.context.ProcessContext
+import io.github.msengbusch.unitsystem.context.ScanContext
+import io.github.msengbusch.unitsystem.step.AnnotationStep
+import io.github.msengbusch.unitsystem.step.Step
+import io.github.msengbusch.unitsystem.steps.event.UnitEventStep
+import io.github.msengbusch.unitsystem.steps.unit.UnitStep
 import io.github.msengbusch.unitsystem.util.fatal
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.SourceVersion
 import javax.lang.model.element.TypeElement
+import javax.tools.StandardLocation
 import kotlin.io.path.Path
+import kotlin.io.path.name
 
 @AutoService(Processor::class)
 class AnnotationProcessor : AbstractProcessor() {
-    private val units = mutableListOf<UnitDeclaration>()
-
-    override fun getSupportedAnnotationTypes(): MutableSet<String> = mutableSetOf(Unit::class.java.name)
     override fun getSupportedSourceVersion(): SourceVersion = SourceVersion.RELEASE_16
+    override fun getSupportedOptions(): MutableSet<String> = mutableSetOf(
+        "org.gradle.annotation.processing.aggregating"
+    )
+
+    override fun getSupportedAnnotationTypes(): MutableSet<String> = steps
+        .filterIsInstance<AnnotationStep<*>>()
+        .map { it.annotationClazz.name }
+        .toMutableSet()
+
+    private val steps = listOf<Step>(
+        UnitEventStep(),
+        UnitStep()
+    )
+
+    private val scanContext = ScanContext()
+    private val processContext = ProcessContext()
+    private val outputContext = OutputContext()
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
         try {
             processImpl(roundEnv)
         } catch (e: Exception) {
-            processingEnv.fatal("FATAL: An exception occurred")
+            processingEnv.fatal("A fatal exception occurred")
             e.printStackTrace()
         }
 
-        return true
+        return false
     }
 
     private fun processImpl(roundEnv: RoundEnvironment) {
-        if(roundEnv.processingOver()) {
-            generateOutput()
+        if(!roundEnv.processingOver()) {
+            scanSteps(roundEnv)
+            processSteps()
         } else {
-            processAnnotations( roundEnv)
+            outputSteps()
         }
     }
 
-    private fun processAnnotations(roundEnv: RoundEnvironment) {
-        units.addAll(UnitProcessor.processUnits(processingEnv, roundEnv))
+    private fun scanSteps(roundEnv: RoundEnvironment) {
+        steps.forEach { step ->
+            step.scan(roundEnv, processingEnv, scanContext)
+        }
     }
 
-    private fun generateOutput() {
-        val generatedSourcesRoot = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME].orEmpty()
-
-        UnitFile.writeUnitFile(Path(generatedSourcesRoot, UNIT_FILE_RESOURCE), units)
+    private fun processSteps() {
+        steps.forEach { step ->
+            step.process(processingEnv, scanContext, processContext)
+        }
     }
 
-    companion object {
-        const val UNIT_FILE_RESOURCE = "units"
-        const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
+    private fun outputSteps() {
+        steps.forEach { step ->
+            step.output(processingEnv, scanContext, processContext, outputContext)
+        }
     }
 }

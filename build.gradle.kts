@@ -43,6 +43,8 @@ allprojects {
     kotlin {
         kotlinDaemonJvmArgs = listOf(
             "-Dfile.encoding=UTF-8",
+            "--show-version",
+            "--enable-preview",
             "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
             "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
             "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
