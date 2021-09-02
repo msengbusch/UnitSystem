@@ -35,6 +35,8 @@ allprojects {
 
         withType<KotlinCompile> {
             kotlinOptions.javaParameters = true
+            targetCompatibility = JavaVersion.VERSION_16.toString()
+            sourceCompatibility = JavaVersion.VERSION_16.toString()
         }
 
         named<Jar>("jar") {
@@ -63,9 +65,11 @@ allprojects {
 
 dependencies {
     api(projects.annotations)
+    api("javax.inject:javax.inject:1")
 
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
-    testImplementation("io.strikt:strikt-core:0.32.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("org.assertj:assertj-core:3.20.2")
 
     kaptTest(projects.processor)
 }
