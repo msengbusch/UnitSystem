@@ -1,4 +1,4 @@
 package io.github.msengbusch.unitsystem.steps.event
 
-class UnitEvent(val clazz: String) {
+data class FoundUnitEvent(val clazz: String) {
 }

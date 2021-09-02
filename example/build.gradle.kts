@@ -7,3 +7,9 @@ dependencies {
 
     kapt(projects.processor)
 }
+
+tasks {
+    named("processResources") {
+        dependsOn(named("kaptKotlin"))
+    }
+}

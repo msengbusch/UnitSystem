@@ -24,7 +24,7 @@ class UnitEventStep : AnnotationStep<UnitEvent> {
 
         processContext.unitEvents.forEach { (_, unitEvent) ->
             lines.add("[UnitEvent]")
-            lines.add("clazz=${unitEvent.clazz}")
+            lines.add("class=${unitEvent.clazz}")
         }
 
         outputContext.unitsFile.addAll(lines)
@@ -35,9 +35,9 @@ class UnitEventStep : AnnotationStep<UnitEvent> {
         val type = element as TypeElement
         val clazzName = type.qualifiedName.toString()
 
-        processingEnv.info("Found class ${type.qualifiedName} annotated with @UnitEvent")
-
-        val unitEvent = UnitEvent(clazzName)
+        val unitEvent = FoundUnitEvent(clazzName)
         processContext.unitEvents[clazzName] = unitEvent
+
+        processingEnv.info("Found @UnitEvent $unitEvent")
     }
 }
