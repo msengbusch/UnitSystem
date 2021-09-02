@@ -8,15 +8,11 @@ import io.github.msengbusch.unitsystem.util.asTypeElement
 import io.github.msengbusch.unitsystem.util.debug
 import io.github.msengbusch.unitsystem.util.info
 import io.github.msengbusch.unitsystem.util.writeToResource
-import java.lang.reflect.Type
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
-import javax.lang.model.element.QualifiedNameable
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.DeclaredType
-import javax.lang.model.type.TypeMirror
 
 class UnitStep : AnnotationStep<Unit> {
     override val annotationClazz: Class<Unit> = Unit::class.java
@@ -32,7 +28,7 @@ class UnitStep : AnnotationStep<Unit> {
         unit.unitEvents = mutableListOf()
 
         unit.parentClasses.forEach { parentClassName ->
-            if(processContext.unitEvents.containsKey(parentClassName)) {
+            if (processContext.unitEvents.containsKey(parentClassName)) {
                 unit.unitEvents!!.add(processContext.unitEvents[parentClassName]!!)
             }
         }
@@ -40,7 +36,11 @@ class UnitStep : AnnotationStep<Unit> {
         processingEnv.info("Processed @Unit $unit")
     }
 
-    override fun output(processingEnv: ProcessingEnvironment, processContext: ProcessContext, outputContext: OutputContext) {
+    override fun output(
+        processingEnv: ProcessingEnvironment,
+        processContext: ProcessContext,
+        outputContext: OutputContext
+    ) {
         val lines = outputContext.unitsFile
 
         processContext.units.forEach { (_, unit) ->
@@ -53,7 +53,13 @@ class UnitStep : AnnotationStep<Unit> {
         processingEnv.writeToResource("units", lines.joinToString("\n"))
     }
 
-    override fun scan(element: Element, annotation: Unit, roundEnv: RoundEnvironment, processingEnv: ProcessingEnvironment, processContext: ProcessContext) {
+    override fun scan(
+        element: Element,
+        annotation: Unit,
+        roundEnv: RoundEnvironment,
+        processingEnv: ProcessingEnvironment,
+        processContext: ProcessContext
+    ) {
         val type = element as TypeElement
 
         val clazzName = type.qualifiedName.toString()
@@ -62,7 +68,7 @@ class UnitStep : AnnotationStep<Unit> {
         val parentClassNames = mutableListOf<String>()
         val superClass = type.superclass?.asTypeElement()
         val superClassName = superClass?.qualifiedName.toString()
-        if(superClass != null && superClassName != "java.lang.Object") {
+        if (superClass != null && superClassName != "java.lang.Object") {
             parentClassNames.add(superClassName)
         }
 

@@ -19,7 +19,11 @@ class UnitEventStep : AnnotationStep<UnitEvent> {
 
     }
 
-    override fun output(processingEnv: ProcessingEnvironment, processContext: ProcessContext, outputContext: OutputContext) {
+    override fun output(
+        processingEnv: ProcessingEnvironment,
+        processContext: ProcessContext,
+        outputContext: OutputContext
+    ) {
         val lines = mutableListOf<String>()
 
         processContext.unitEvents.forEach { (_, unitEvent) ->
@@ -31,7 +35,13 @@ class UnitEventStep : AnnotationStep<UnitEvent> {
     }
 
 
-    override fun scan(element: Element, annotation: UnitEvent, roundEnv: RoundEnvironment, processingEnv: ProcessingEnvironment, processContext: ProcessContext) {
+    override fun scan(
+        element: Element,
+        annotation: UnitEvent,
+        roundEnv: RoundEnvironment,
+        processingEnv: ProcessingEnvironment,
+        processContext: ProcessContext
+    ) {
         val type = element as TypeElement
         val clazzName = type.qualifiedName.toString()
 

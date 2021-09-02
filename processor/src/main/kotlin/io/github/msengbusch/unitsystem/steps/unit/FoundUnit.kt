@@ -8,7 +8,7 @@ data class FoundUnit(val name: String, val clazz: String, val parentClasses: Lis
     override fun toString(): String {
         var string = "FoundUnit(name='$name', clazz='$clazz'"
 
-        string = if(unitEvents == null) {
+        string = if (unitEvents == null) {
             "$string, parentClasses=$parentClasses"
         } else {
             "$string, unitEvents=$unitEvents"

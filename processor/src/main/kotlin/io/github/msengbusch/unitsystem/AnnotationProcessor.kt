@@ -46,7 +46,7 @@ class AnnotationProcessor : AbstractProcessor() {
     }
 
     private fun processImpl(roundEnv: RoundEnvironment) {
-        if(!roundEnv.processingOver()) {
+        if (!roundEnv.processingOver()) {
             scanSteps(roundEnv)
         } else {
             processSteps()

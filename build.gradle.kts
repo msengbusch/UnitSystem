@@ -2,6 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+
+    `config-kapt`
 }
 
 val buildRelease: Provider<String> = providers.environmentVariable("BUILD_RELEASE").forUseAtConfigurationTime()
@@ -54,15 +56,18 @@ allprojects {
             "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
             "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
             "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED")
+            "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        )
     }
 }
 
 dependencies {
     api(projects.annotations)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
+    testImplementation("io.strikt:strikt-core:0.32.0")
+
+    kaptTest(projects.processor)
 }
 
 tasks {
