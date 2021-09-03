@@ -12,7 +12,7 @@ class InjectionScopeTest {
 
     @Test
     fun testSingletonInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
         injection.bindSingleton(String::class.java, "test")
 
         val instance = injection.getInstance(OneArgumentTest::class.java)
@@ -22,7 +22,7 @@ class InjectionScopeTest {
 
     @Test
     fun testProviderInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         var current = 0
         injection.bindProvider(String::class.java) {
@@ -39,7 +39,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInterfaceMappingSingletonInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
         injection.bindSingleton(String::class.java, "test")
         injection.bindInterface(TestInterface::class.java, OneArgumentTest::class.java)
 
@@ -51,7 +51,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInterfaceMappingInjectionFailNoInterfaceBound() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.getInstance(TestInterface::class.java) }
@@ -61,7 +61,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInterfaceProviderInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
         injection.bindProvider(TestInterface::class.java) { OneArgumentTest("test") }
 
         val instance = injection.getInstance(TestInterface::class.java)
@@ -71,7 +71,7 @@ class InjectionScopeTest {
 
     @Test
     fun testProvidedSingletonInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         var count = 0
         injection.bindProvider(SingletonTest::class.java, Provider {
@@ -88,7 +88,7 @@ class InjectionScopeTest {
 
     @Test
     fun testProviderArgumentInjection() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
         injection.bindSingleton(String::class.java, "test")
 
         val instance = injection.getInstance(ProviderTest::class.java)
@@ -98,7 +98,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInjectionFailIfNoPublicConstructor() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.getInstance(NoPublicConstructorTest::class.java) }
@@ -108,7 +108,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInjectionFailIfNoAnnotatedConstructor() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.getInstance(SingletonTest::class.java) }
@@ -118,7 +118,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInjectionFailIfMoreThanOneConstructor() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.getInstance(MoreThanOneConstructorTest::class.java) }
@@ -128,7 +128,7 @@ class InjectionScopeTest {
 
     @Test
     fun testInjectionCircularDependencyFail() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.getInstance(CircularDependencyTestA::class.java) }
@@ -138,8 +138,8 @@ class InjectionScopeTest {
 
     @Test
     fun testParentInjection() {
-        val parentInjection = InjectionScope()
-        val injection = InjectionScope(parentInjection)
+        val parentInjection = DefaultInjectionScope()
+        val injection = DefaultInjectionScope(parentInjection)
         parentInjection.bindSingleton(OneArgumentTest::class.java, OneArgumentTest("test"))
 
         val instance = injection.getInstance(OneArgumentTest::class.java)
@@ -149,7 +149,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindSingletonFailIfProviderAlreadyBound() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         injection.bindProvider(String::class.java) { "provider" }
 
@@ -161,7 +161,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindSingletonFailIfIsAbstractClass() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.bindSingleton(TestInterface::class.java, OneArgumentTest("test")) }
@@ -171,7 +171,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindProviderFailIfSingletonAlreadyBound() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         injection.bindSingleton(String::class.java, "singleton")
 
@@ -183,7 +183,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindProviderFailIfInterfaceAlreadyBound() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         injection.bindInterface(TestInterface::class.java, OneArgumentTest::class.java)
 
@@ -195,7 +195,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindInterfaceFailIfNoInterfaceType() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.bindInterface(OneArgumentTest::class.java, OneArgumentTest::class.java) }
@@ -205,7 +205,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindInterfaceFailIfInterfaceType() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         assertThatExceptionOfType(InjectionException::class.java)
             .isThrownBy { injection.bindInterface(TestInterface::class.java, TestInterface::class.java) }
@@ -215,7 +215,7 @@ class InjectionScopeTest {
 
     @Test
     fun testBindInterfaceFailIfProviderAlreadyBound() {
-        val injection = InjectionScope()
+        val injection = DefaultInjectionScope()
 
         injection.bindProvider(TestInterface::class.java) { OneArgumentTest("test") }
 

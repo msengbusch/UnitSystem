@@ -1,9 +1,9 @@
 package io.github.msengbusch.unitsystem.steps.unit
 
-import io.github.msengbusch.unitsystem.Unit
 import io.github.msengbusch.unitsystem.context.OutputContext
 import io.github.msengbusch.unitsystem.context.ProcessContext
 import io.github.msengbusch.unitsystem.step.AnnotationStep
+import io.github.msengbusch.unitsystem.unit.Unit
 import io.github.msengbusch.unitsystem.util.asTypeElement
 import io.github.msengbusch.unitsystem.util.debug
 import io.github.msengbusch.unitsystem.util.info

@@ -2,4 +2,4 @@ rootProject.name = "UnitSystem"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-include("annotations", "processor", "example")
+include("api", "processor", "example")

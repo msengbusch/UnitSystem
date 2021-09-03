@@ -1,12 +1,16 @@
 package io.github.msengbusch.unitsystem.example
 
-import io.github.msengbusch.unitsystem.loading.UnitLoader
+import io.github.msengbusch.unitsystem.loading.DefaultLoader
+import io.github.msengbusch.unitsystem.loading.DefaultParser
 
 fun main() {
-    val loader = UnitLoader()
-    val context = loader.loadContext()
+    val parser = DefaultParser()
+    parser.parse(DefaultParser.defaultUnitFileContent())
 
-    context.unitEvents.forEach { (_, event) ->
+    val loader = DefaultLoader()
+    val context = loader.loadContext(parser)
+
+    context.events.forEach { (_, event) ->
         println("Unit Event: ")
         println("Class: ${event.clazz}")
         println("----------------------")

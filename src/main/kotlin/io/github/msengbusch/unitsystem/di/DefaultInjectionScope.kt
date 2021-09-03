@@ -9,14 +9,14 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
-class InjectionScope(private val parent: InjectionScope? = null) {
+class DefaultInjectionScope(private val parent: DefaultInjectionScope? = null) : InjectionScope {
     private val requestedClasses: MutableSet<Class<*>> = mutableSetOf()
     private val instantiableClasses: MutableSet<Class<*>> = mutableSetOf()
     private val singletons: MutableMap<Class<*>, Any> = mutableMapOf()
     private val providers: MutableMap<Class<*>, Provider<*>> = mutableMapOf()
     private val interfaceMappings: MutableMap<Class<*>, Class<*>> = mutableMapOf()
 
-    fun <T> bindProvider(clazz: Class<T>, provider: Provider<T>) {
+    override fun <T> bindProvider(clazz: Class<T>, provider: Provider<T>) {
         if (singletons.containsKey(clazz)) {
             throw InjectionException("Class ${clazz.name} is already bound as singleton")
         }
@@ -28,7 +28,7 @@ class InjectionScope(private val parent: InjectionScope? = null) {
         providers[clazz] = provider
     }
 
-    fun <T> bindSingleton(clazz: Class<T>, instance: T) where T : Any {
+    override fun <T> bindSingleton(clazz: Class<T>, instance: T) where T : Any {
         if (isAbstractOrInterface(clazz)) {
             throw InjectionException("Class ${clazz.name} can not be bound as singleton because it is an interface or abstract class")
         }
@@ -40,24 +40,24 @@ class InjectionScope(private val parent: InjectionScope? = null) {
         singletons[clazz] = instance
     }
 
-    fun <T> bindInterface(interfaceType: Class<T>, implementationType: Class<out T>) {
-        if (!isAbstractOrInterface(interfaceType)) {
-            throw InjectionException("Class ${interfaceType.name} is not an interface or abstract class. Expecting the first argument to be one")
+    override fun <T> bindInterface(interfaceClass: Class<T>, implementationClass: Class<out T>) {
+        if (!isAbstractOrInterface(interfaceClass)) {
+            throw InjectionException("Class ${interfaceClass.name} is not an interface or abstract class. Expecting the first argument to be one")
         }
 
-        if (isAbstractOrInterface(implementationType)) {
-            throw InjectionException("Class ${implementationType.name} is an interface or abstract class. Expecting the second argument to be an actual implementing class")
+        if (isAbstractOrInterface(implementationClass)) {
+            throw InjectionException("Class ${implementationClass.name} is an interface or abstract class. Expecting the second argument to be an actual implementing class")
         }
 
-        if (providers.containsKey(interfaceType)) {
-            throw InjectionException("Class ${interfaceType.name} is already bound as provider")
+        if (providers.containsKey(interfaceClass)) {
+            throw InjectionException("Class ${interfaceClass.name} is already bound as provider")
         }
 
-        interfaceMappings[interfaceType] = implementationType
+        interfaceMappings[interfaceClass] = implementationClass
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getInstance(clazz: Class<T>): T {
+    override fun <T> getInstance(clazz: Class<T>): T {
         var requestedType = clazz
 
         if (isAbstractOrInterface(requestedType)) {
