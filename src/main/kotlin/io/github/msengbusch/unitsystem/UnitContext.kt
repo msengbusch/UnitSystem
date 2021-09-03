@@ -1,4 +1,4 @@
-package io.github.msengbusch.unitsystem.loading
+package io.github.msengbusch.unitsystem
 
 import io.github.msengbusch.unitsystem.event.UnitEventContainer
 import io.github.msengbusch.unitsystem.unit.UnitContainer

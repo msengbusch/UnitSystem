@@ -1,6 +1,7 @@
-package io.github.msengbusch.unitsystem.example
+package io.github.msengbusch.unitsystem.example.unit
 
 import io.github.msengbusch.unitsystem.Unit
+import io.github.msengbusch.unitsystem.example.event.UnitCycle
 
 @Unit("testUnit2")
 class TestUnit2(override val size: Int) : List<String>, UnitCycle {

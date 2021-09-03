@@ -1,3 +1,9 @@
 package io.github.msengbusch.unitsystem
 
-class UnitSystem
+import io.github.msengbusch.unitsystem.loading.UnitLoader
+
+class UnitSystem(private val loader: UnitLoader) {
+    val context = loader.loadContext()
+
+
+}

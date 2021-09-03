@@ -1,19 +1,37 @@
 package io.github.msengbusch.unitsystem.loading
 
+import io.github.msengbusch.unitsystem.UnitContext
 import io.github.msengbusch.unitsystem.event.UnitEventContainer
 import io.github.msengbusch.unitsystem.exception.UnitLoadingException
 import io.github.msengbusch.unitsystem.unit.UnitContainer
+import io.github.msengbusch.unitsystem.util.UNIT_FILE_GRADLE_PATH
+import io.github.msengbusch.unitsystem.util.UNIT_FILE_JAR_RESOURCE
+import io.github.msengbusch.unitsystem.util.contentFromResource
+import java.nio.file.Files
+import kotlin.io.path.Path
 
 class UnitLoader {
-    fun loadContext(content: List<String>): UnitContext {
+    fun loadContext(): UnitContext {
+        val content: List<String>
+
+        val gradlePath = Path(UNIT_FILE_GRADLE_PATH)
+        content = if (Files.exists(gradlePath)) {
+            Files.readAllLines(gradlePath)
+        } else {
+            contentFromResource(UNIT_FILE_JAR_RESOURCE)
+        }
+
+        return loadContext(content)
+    }
+
+    private fun loadContext(content: List<String>): UnitContext {
         val parser = UnitParser()
         parser.parse(content)
 
         val unitEvents = loadUnitEvents(parser)
         val units = loadUnits(parser, unitEvents.mapKeys { (_, value) -> value.clazz.name })
 
-        val context = UnitContext(unitEvents, units)
-        return context
+        return UnitContext(unitEvents, units)
     }
 
     private fun loadUnitEvents(parser: UnitParser): Map<Class<*>, UnitEventContainer> {

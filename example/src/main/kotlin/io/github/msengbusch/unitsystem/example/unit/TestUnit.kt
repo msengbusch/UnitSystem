@@ -1,6 +1,7 @@
-package io.github.msengbusch.unitsystem.example
+package io.github.msengbusch.unitsystem.example.unit
 
 import io.github.msengbusch.unitsystem.Unit
+import io.github.msengbusch.unitsystem.example.event.UnitCycle
 
 @Unit("testUnit")
 class TestUnit : UnitCycle {

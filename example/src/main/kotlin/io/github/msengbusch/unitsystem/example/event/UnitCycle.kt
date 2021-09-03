@@ -1,4 +1,4 @@
-package io.github.msengbusch.unitsystem.example
+package io.github.msengbusch.unitsystem.example.event
 
 import io.github.msengbusch.unitsystem.event.UnitEvent
 
