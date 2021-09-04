@@ -9,12 +9,12 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
-class DefaultInjectionScope(private val parent: DefaultInjectionScope? = null) : InjectionScope {
-    private val requestedClasses: MutableSet<Class<*>> = mutableSetOf()
-    private val instantiableClasses: MutableSet<Class<*>> = mutableSetOf()
-    private val singletons: MutableMap<Class<*>, Any> = mutableMapOf()
-    private val providers: MutableMap<Class<*>, Provider<*>> = mutableMapOf()
-    private val interfaceMappings: MutableMap<Class<*>, Class<*>> = mutableMapOf()
+abstract class AbstractScope : Scope {
+    protected val requestedClasses: MutableSet<Class<*>> = mutableSetOf()
+    protected val instantiableClasses: MutableSet<Class<*>> = mutableSetOf()
+    protected val singletons: MutableMap<Class<*>, Any> = mutableMapOf()
+    protected val providers: MutableMap<Class<*>, Provider<*>> = mutableMapOf()
+    protected val interfaceMappings: MutableMap<Class<*>, Class<*>> = mutableMapOf()
 
     override fun <T> bindProvider(clazz: Class<T>, provider: Provider<T>) {
         if (singletons.containsKey(clazz)) {
@@ -88,18 +88,12 @@ class DefaultInjectionScope(private val parent: DefaultInjectionScope? = null) :
             return instance
         }
 
-        parent?.let {
-            if (parent.knowsType(requestedType)) return parent.getInstance(requestedType)
-        }
-
         return createNewInstance(requestedType)
     }
 
-    private fun knowsType(clazz: Class<*>): Boolean {
-        return singletons.containsKey(clazz) || providers.containsKey(clazz)
-    }
+    override fun isTypeKnown(clazz: Class<*>): Boolean = singletons.containsKey(clazz) || providers.containsKey(clazz)
 
-    private fun <T> createNewInstance(clazz: Class<T>): T {
+    protected open fun <T> createNewInstance(clazz: Class<T>): T {
         val constructor = findConstructor(clazz)
         val arguments = constructor.parameters.map {
             if (it.type == Provider::class.java) {

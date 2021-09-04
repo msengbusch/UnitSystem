@@ -5,5 +5,5 @@ import io.github.msengbusch.unitsystem.unit.Container
 
 interface Context {
     val events: Map<Class<*>, EventContainer>
-    val units: Map<Class<*>, Container>
+    val units: Map<Class<*>, Container<*>>
 }

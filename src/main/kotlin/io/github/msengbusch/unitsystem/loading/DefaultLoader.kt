@@ -33,9 +33,9 @@ class DefaultLoader : Loader {
         return events
     }
 
-    private fun loadUnits(parser: Parser, events: Map<Class<*>, EventContainer>): Map<Class<*>, Container> {
+    private fun loadUnits(parser: Parser, events: Map<Class<*>, EventContainer>): Map<Class<*>, Container<*>> {
         val eventsByClassName = events.mapKeys { (clazz, _) -> clazz.name }
-        val units = mutableMapOf<Class<*>, Container>()
+        val units = mutableMapOf<Class<*>, Container<*>>()
 
         parser.units.forEach { entry ->
             val clazz: Class<*>
@@ -53,7 +53,7 @@ class DefaultLoader : Loader {
                 eventsByClassName[event]!!
             }
 
-            units[clazz] = DefaultContainer(entry.name!!, clazz, eventContainers)
+            units[clazz] = DefaultContainer(entry.name!!, clazz, eventContainers) as Container<*>
         }
 
         return units
