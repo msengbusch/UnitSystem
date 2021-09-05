@@ -1,5 +1,10 @@
 package io.github.msengbusch.unitsystem.example
 
+import io.github.msengbusch.unitsystem.DefaultManager
+import io.github.msengbusch.unitsystem.di.DefaultScope
+import io.github.msengbusch.unitsystem.example.event.UnitCycle
+import io.github.msengbusch.unitsystem.example.event.UnitReload
+import io.github.msengbusch.unitsystem.loading.DefaultConstructor
 import io.github.msengbusch.unitsystem.loading.DefaultLoader
 import io.github.msengbusch.unitsystem.loading.DefaultParser
 
@@ -25,5 +30,23 @@ fun main() {
             println("Class: ${event.clazz}")
         }
         println("----------------------")
+    }
+
+    val scope = DefaultScope()
+    val constructor = DefaultConstructor(scope)
+
+    constructor.constructAll(context)
+
+    val manager = DefaultManager(context)
+    manager.callEvent(UnitCycle::class.java) {
+        it.enable()
+    }
+
+    manager.callEvent(UnitCycle::class.java) {
+        it.disable()
+    }
+
+    manager.callEvent(UnitReload::class.java) {
+        it.reload()
     }
 }

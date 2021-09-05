@@ -2,16 +2,20 @@ package io.github.msengbusch.unitsystem.example.unit
 
 import io.github.msengbusch.unitsystem.example.event.UnitCycle
 import io.github.msengbusch.unitsystem.unit.Unit
+import javax.inject.Inject
 
 @Unit("testUnit2")
-class TestUnit2(override val size: Int) : List<String>, UnitCycle {
+class TestUnit2 @Inject constructor() : List<String>, UnitCycle {
     override fun enable() {
-        println("Test unit enable")
+        println("Test unit 2 enable")
     }
 
     override fun disable() {
-        println("Test unit disable")
+        println("Test unit 2 disable")
     }
+
+    override val size: Int
+        get() = TODO("Not yet implemented")
 
     override fun contains(element: String): Boolean {
         TODO("Not yet implemented")

@@ -1,6 +1,6 @@
 package io.github.msengbusch.unitsystem.loading
 
-import io.github.msengbusch.unitsystem.exception.LoadingException
+import io.github.msengbusch.unitsystem.exception.UnitException
 import io.github.msengbusch.unitsystem.util.UNIT_FILE_GRADLE_PATH
 import io.github.msengbusch.unitsystem.util.UNIT_FILE_JAR_RESOURCE
 import io.github.msengbusch.unitsystem.util.contentFromResource
@@ -29,11 +29,11 @@ class DefaultParser : Parser {
 
             val split = line.split("=")
             if (split.size == 1) {
-                throw LoadingException("Expected key=value line: $line")
+                throw UnitException("Expected key=value line: $line")
             }
 
             if (split.size > 2) {
-                throw LoadingException("Expected only one = per line: $line")
+                throw UnitException("Expected only one = per line: $line")
             }
 
             currentEntry.read(split[0], split[1])
@@ -64,7 +64,7 @@ class DefaultParser : Parser {
 
         override fun finish() {
             if (className == null) {
-                throw LoadingException("One event unit entry does not contain the class name")
+                throw UnitException("One event unit entry does not contain the class name")
             }
 
             events.add(this)
@@ -90,11 +90,11 @@ class DefaultParser : Parser {
 
         override fun finish() {
             if (name == null) {
-                throw LoadingException("$this does not include a name")
+                throw UnitException("$this does not include a name")
             }
 
             if (className == null) {
-                throw LoadingException("$this does not include a class")
+                throw UnitException("$this does not include a class")
             }
 
             units.add(this)
