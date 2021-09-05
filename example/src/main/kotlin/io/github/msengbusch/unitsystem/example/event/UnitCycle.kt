@@ -1,8 +1,8 @@
 package io.github.msengbusch.unitsystem.example.event
 
-import io.github.msengbusch.unitsystem.event.UnitEvent
+import io.github.msengbusch.unitsystem.event.Event
 
-@UnitEvent
+@Event
 interface UnitCycle {
     fun enable()
     fun disable()

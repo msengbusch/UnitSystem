@@ -1,6 +1,6 @@
 package test
 
-import io.github.msengbusch.unitsystem.event.UnitEvent
+import io.github.msengbusch.unitsystem.event.Event
 
-@UnitEvent
+@Event
 interface TestUnitEvent2

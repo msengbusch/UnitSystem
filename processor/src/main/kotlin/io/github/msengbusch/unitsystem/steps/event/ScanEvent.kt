@@ -1,4 +1,3 @@
 package io.github.msengbusch.unitsystem.steps.event
 
-data class FoundUnitEvent(val clazz: String) {
-}
+data class ScanEvent(val className: String)

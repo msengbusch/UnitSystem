@@ -1,6 +1,6 @@
 package io.github.msengbusch.unitsystem.step
 
-import io.github.msengbusch.unitsystem.context.ProcessContext
+import io.github.msengbusch.unitsystem.context.ScanContext
 import javax.annotation.processing.ProcessingEnvironment
 import javax.annotation.processing.RoundEnvironment
 import javax.lang.model.element.Element
@@ -15,14 +15,14 @@ interface AnnotationStep<A> : Step where A : Annotation {
         annotation: A,
         roundEnv: RoundEnvironment,
         processingEnv: ProcessingEnvironment,
-        processContext: ProcessContext
+        scanContext: ScanContext
     )
 
     fun scan(
         elements: Map<out Element, A>,
         roundEnv: RoundEnvironment,
         processingEnv: ProcessingEnvironment,
-        processContext: ProcessContext
+        scanContext: ScanContext
     ) {
         allowedElementKinds?.let { kinds ->
             elements.forEach { (element, _) ->
@@ -39,14 +39,14 @@ interface AnnotationStep<A> : Step where A : Annotation {
         }
 
         elements.forEach { (element, annotation) ->
-            scan(element, annotation, roundEnv, processingEnv, processContext)
+            scan(element, annotation, roundEnv, processingEnv, scanContext)
         }
     }
 
     override fun scan(
         roundEnv: RoundEnvironment,
         processingEnv: ProcessingEnvironment,
-        processContext: ProcessContext
+        scanContext: ScanContext
     ) {
         val elements = mutableMapOf<Element, A>()
 
@@ -54,6 +54,6 @@ interface AnnotationStep<A> : Step where A : Annotation {
             elements[element] = element.getAnnotation(annotationClazz)
         }
 
-        scan(elements, roundEnv, processingEnv, processContext)
+        scan(elements, roundEnv, processingEnv, scanContext)
     }
 }

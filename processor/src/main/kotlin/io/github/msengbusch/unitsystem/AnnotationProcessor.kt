@@ -3,9 +3,10 @@ package io.github.msengbusch.unitsystem
 import com.google.auto.service.AutoService
 import io.github.msengbusch.unitsystem.context.OutputContext
 import io.github.msengbusch.unitsystem.context.ProcessContext
+import io.github.msengbusch.unitsystem.context.ScanContext
 import io.github.msengbusch.unitsystem.step.AnnotationStep
 import io.github.msengbusch.unitsystem.step.Step
-import io.github.msengbusch.unitsystem.steps.event.UnitEventStep
+import io.github.msengbusch.unitsystem.steps.event.EventStep
 import io.github.msengbusch.unitsystem.steps.unit.UnitStep
 import io.github.msengbusch.unitsystem.util.fatal
 import javax.annotation.processing.AbstractProcessor
@@ -27,10 +28,11 @@ class AnnotationProcessor : AbstractProcessor() {
         .toMutableSet()
 
     private val steps = listOf<Step>(
-        UnitEventStep(),
+        EventStep(),
         UnitStep()
     )
 
+    private val scanContext = ScanContext()
     private val processContext = ProcessContext()
     private val outputContext = OutputContext()
 
@@ -56,19 +58,19 @@ class AnnotationProcessor : AbstractProcessor() {
 
     private fun scanSteps(roundEnv: RoundEnvironment) {
         steps.forEach { step ->
-            step.scan(roundEnv, processingEnv, processContext)
+            step.scan(roundEnv, processingEnv, scanContext)
         }
     }
 
     private fun processSteps() {
         steps.forEach { step ->
-            step.process(processingEnv, processContext)
+            step.process(processingEnv, scanContext, processContext)
         }
     }
 
     private fun outputSteps() {
         steps.forEach { step ->
-            step.output(processingEnv, processContext, outputContext)
+            step.output(processingEnv, scanContext, processContext, outputContext)
         }
     }
 }
