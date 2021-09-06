@@ -14,3 +14,5 @@ fun ProcessingEnvironment.writeToResource(path: String, content: String) {
     outputStream.write(content)
     outputStream.close()
 }
+
+fun ProcessingEnvironment.writeToResource(path: String, content: List<String>) = writeToResource(path, content.joinToString("\n"))

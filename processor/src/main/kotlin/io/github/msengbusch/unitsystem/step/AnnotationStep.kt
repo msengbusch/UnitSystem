@@ -1,59 +1,28 @@
 package io.github.msengbusch.unitsystem.step
 
-import io.github.msengbusch.unitsystem.context.ScanContext
-import javax.annotation.processing.ProcessingEnvironment
-import javax.annotation.processing.RoundEnvironment
+import io.github.msengbusch.unitsystem.context.Context
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 
 interface AnnotationStep<A> : Step where A : Annotation {
-    val annotationClazz: Class<A>
-    val allowedElementKinds: Set<ElementKind>?
+    val supportedAnnotation: Class<A>
+    val supportedElementKinds: List<ElementKind>?
 
-    fun scan(
-        element: Element,
-        annotation: A,
-        roundEnv: RoundEnvironment,
-        processingEnv: ProcessingEnvironment,
-        scanContext: ScanContext
-    )
+    override fun process(context: Context) {
+        val elements = context.roundEnv.getElementsAnnotatedWith(supportedAnnotation)
 
-    fun scan(
-        elements: Map<out Element, A>,
-        roundEnv: RoundEnvironment,
-        processingEnv: ProcessingEnvironment,
-        scanContext: ScanContext
-    ) {
-        allowedElementKinds?.let { kinds ->
-            elements.forEach { (element, _) ->
-                if (!kinds.contains(element.kind)) {
-                    throw IllegalArgumentException(
-                        "Annotation ${annotationClazz.name} was used on ${element.simpleName} of kind ${element.kind} but only those kinds are allowed: ${
-                            kinds.joinToString(
-                                ","
-                            )
-                        }"
-                    )
+        supportedElementKinds?.let { kinds ->
+            elements.forEach { element ->
+                if(!kinds.contains(element.kind)) {
+                    throw IllegalArgumentException("${supportedAnnotation.name} was used on ${element.simpleName} of kind ${element.kind} but only those kinds are allowed: ${kinds.joinToString()}")
                 }
             }
         }
 
-        elements.forEach { (element, annotation) ->
-            scan(element, annotation, roundEnv, processingEnv, scanContext)
+        elements.forEach { element ->
+            process(context, element, element.getAnnotation(supportedAnnotation))
         }
     }
 
-    override fun scan(
-        roundEnv: RoundEnvironment,
-        processingEnv: ProcessingEnvironment,
-        scanContext: ScanContext
-    ) {
-        val elements = mutableMapOf<Element, A>()
-
-        roundEnv.getElementsAnnotatedWith(annotationClazz).forEach { element ->
-            elements[element] = element.getAnnotation(annotationClazz)
-        }
-
-        scan(elements, roundEnv, processingEnv, scanContext)
-    }
+    fun process(context: Context, element: Element, annotation: A)
 }

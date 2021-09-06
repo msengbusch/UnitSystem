@@ -18,8 +18,9 @@ class DefaultParser : Parser {
             val line = rawLine.trim()
 
             val skip = when (line) {
-                "[UnitEvent]" -> newEntry(ParsingEventEntry())
+                "[Event]" -> newEntry(ParsingEventEntry())
                 "[Unit]" -> newEntry(ParsingUnitEntry())
+                "[Order]" -> true
                 else -> false
             }
 
@@ -79,12 +80,16 @@ class DefaultParser : Parser {
         override var name: String? = null
         override var className: String? = null
         override var events: List<String>? = null
+        override var before: List<String>? = null
+        override var after: List<String>? = null
 
         override fun read(key: String, value: String) {
             when (key) {
                 "name" -> name = value
                 "class" -> className = value
                 "events" -> events = value.split(",")
+                "before" -> before = value.split(",")
+                "after" -> after = value.split(",")
             }
         }
 
@@ -101,7 +106,7 @@ class DefaultParser : Parser {
         }
 
         override fun toString(): String {
-            return "UnitEntry(name=$name, className=$className, events=$events)"
+            return "UnitEntry(name=$name, className=$className, events=$events, before=$before, after=$after)"
         }
     }
 

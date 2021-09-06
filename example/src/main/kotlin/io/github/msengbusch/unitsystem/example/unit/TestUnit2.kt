@@ -4,7 +4,7 @@ import io.github.msengbusch.unitsystem.example.event.UnitCycle
 import io.github.msengbusch.unitsystem.unit.Unit
 import javax.inject.Inject
 
-@Unit("testUnit2")
+@Unit("testUnit2", before = ["testUnit4"], after = ["testUnit3"])
 class TestUnit2 @Inject constructor() : List<String>, UnitCycle {
     override fun enable() {
         println("Test unit 2 enable")

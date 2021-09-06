@@ -5,7 +5,7 @@ import io.github.msengbusch.unitsystem.example.event.UnitReload
 import io.github.msengbusch.unitsystem.unit.Unit
 import javax.inject.Inject
 
-@Unit("testUnit")
+@Unit("testUnit3")
 class TestUnit3 @Inject constructor() : UnitCycle, UnitReload {
     override fun enable() {
         println("Test unit 3 enable")

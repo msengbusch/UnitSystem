@@ -6,4 +6,6 @@ interface Container<T> {
     val name: String
     val clazz: Class<T>
     val events: List<EventContainer>?
+    val before: List<Container<*>>
+    val after: List<Container<*>>
 }

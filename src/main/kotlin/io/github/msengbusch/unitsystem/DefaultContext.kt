@@ -6,8 +6,8 @@ import io.github.msengbusch.unitsystem.unit.Instance
 
 class DefaultContext : Context {
     override val events: MutableMap<Class<*>, EventContainer> = mutableMapOf()
-    override val units: MutableMap<Class<*>, Container<*>> = mutableMapOf()
-    override val instances: MutableMap<Container<*>, MutableList<Instance<*>>> = mutableMapOf()
+    override val units: MutableMap<Class<*>, Container<*>> = linkedMapOf()
+    override val instances: MutableMap<Container<*>, MutableList<Instance<*>>> = linkedMapOf()
     override val eventsToUnits: MutableMap<EventContainer, MutableList<Container<*>>> = mutableMapOf()
 
     override fun addEvent(event: EventContainer) {

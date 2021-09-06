@@ -1,14 +1,12 @@
 package io.github.msengbusch.unitsystem
 
 import com.google.auto.service.AutoService
-import io.github.msengbusch.unitsystem.context.OutputContext
-import io.github.msengbusch.unitsystem.context.ProcessContext
-import io.github.msengbusch.unitsystem.context.ScanContext
-import io.github.msengbusch.unitsystem.step.AnnotationStep
-import io.github.msengbusch.unitsystem.step.Step
-import io.github.msengbusch.unitsystem.steps.event.EventStep
-import io.github.msengbusch.unitsystem.steps.unit.UnitStep
-import io.github.msengbusch.unitsystem.util.fatal
+import io.github.msengbusch.unitsystem.context.Context
+import io.github.msengbusch.unitsystem.steps.event.EventScanStep
+import io.github.msengbusch.unitsystem.steps.unit.UnitOutputStep
+import io.github.msengbusch.unitsystem.steps.unit.UnitScanStep
+import io.github.msengbusch.unitsystem.steps.unit.UnitSortStep
+import io.github.msengbusch.unitsystem.steps.unit.UnitValidateStep
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Processor
 import javax.annotation.processing.RoundEnvironment
@@ -22,55 +20,31 @@ class AnnotationProcessor : AbstractProcessor() {
         "org.gradle.annotation.processing.aggregating"
     )
 
-    override fun getSupportedAnnotationTypes(): MutableSet<String> = steps
-        .filterIsInstance<AnnotationStep<*>>()
-        .map { it.annotationClazz.name }
+    override fun getSupportedAnnotationTypes(): MutableSet<String> = context.getSupportedAnnotations()
+        .map { clazz -> clazz.name }
         .toMutableSet()
 
-    private val steps = listOf<Step>(
-        EventStep(),
-        UnitStep()
-    )
+    private val context = Context()
 
-    private val scanContext = ScanContext()
-    private val processContext = ProcessContext()
-    private val outputContext = OutputContext()
+    init {
+        context.registerStepPerRound(EventScanStep())
+        context.registerStepPerRound(UnitScanStep())
+
+        context.registerStep(UnitValidateStep())
+        context.registerStep(UnitSortStep())
+
+        context.registerStep(UnitOutputStep())
+    }
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        try {
-            processImpl(roundEnv)
-        } catch (e: Exception) {
-            processingEnv.fatal("A fatal exception occurred")
-            e.printStackTrace()
+        context.initialize(processingEnv)
+
+        if(roundEnv.processingOver()) {
+            context.finish()
+        } else {
+            context.round(roundEnv)
         }
 
         return false
-    }
-
-    private fun processImpl(roundEnv: RoundEnvironment) {
-        if (!roundEnv.processingOver()) {
-            scanSteps(roundEnv)
-        } else {
-            processSteps()
-            outputSteps()
-        }
-    }
-
-    private fun scanSteps(roundEnv: RoundEnvironment) {
-        steps.forEach { step ->
-            step.scan(roundEnv, processingEnv, scanContext)
-        }
-    }
-
-    private fun processSteps() {
-        steps.forEach { step ->
-            step.process(processingEnv, scanContext, processContext)
-        }
-    }
-
-    private fun outputSteps() {
-        steps.forEach { step ->
-            step.output(processingEnv, scanContext, processContext, outputContext)
-        }
     }
 }

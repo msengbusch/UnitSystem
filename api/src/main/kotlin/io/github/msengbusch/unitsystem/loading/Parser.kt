@@ -14,5 +14,7 @@ interface Parser {
         val name: String?
         val className: String?
         val events: List<String>?
+        val before: List<String>?
+        val after: List<String>?
     }
 }
