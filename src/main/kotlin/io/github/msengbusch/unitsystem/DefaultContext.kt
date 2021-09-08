@@ -1,8 +1,9 @@
 package io.github.msengbusch.unitsystem
 
-import io.github.msengbusch.unitsystem.event.EventContainer
-import io.github.msengbusch.unitsystem.unit.Container
-import io.github.msengbusch.unitsystem.unit.Instance
+import io.github.msengbusch.unitsystem.old.Context
+import io.github.msengbusch.unitsystem.old.event.EventContainer
+import io.github.msengbusch.unitsystem.old.unit.Container
+import io.github.msengbusch.unitsystem.old.unit.Instance
 
 class DefaultContext : Context {
     override val events: MutableMap<Class<*>, EventContainer> = mutableMapOf()

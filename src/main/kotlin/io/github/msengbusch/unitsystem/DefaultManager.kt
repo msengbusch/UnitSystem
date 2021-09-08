@@ -1,6 +1,8 @@
 package io.github.msengbusch.unitsystem
 
 import io.github.msengbusch.unitsystem.exception.UnitException
+import io.github.msengbusch.unitsystem.old.Context
+import io.github.msengbusch.unitsystem.old.Manager
 import java.util.function.Consumer
 
 class DefaultManager(private val context: Context) : Manager {

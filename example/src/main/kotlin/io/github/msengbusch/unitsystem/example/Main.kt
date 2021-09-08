@@ -1,12 +1,12 @@
 package io.github.msengbusch.unitsystem.example
 
 import io.github.msengbusch.unitsystem.DefaultManager
-import io.github.msengbusch.unitsystem.di.DefaultScope
 import io.github.msengbusch.unitsystem.example.event.UnitCycle
 import io.github.msengbusch.unitsystem.example.event.UnitReload
-import io.github.msengbusch.unitsystem.loading.DefaultConstructor
-import io.github.msengbusch.unitsystem.loading.DefaultLoader
-import io.github.msengbusch.unitsystem.loading.DefaultParser
+import io.github.msengbusch.unitsystem.old.loading.DefaultConstructor
+import io.github.msengbusch.unitsystem.old.loading.DefaultLoader
+import io.github.msengbusch.unitsystem.old.loading.DefaultParser
+import io.github.msengbusch.unitsystem.old.scope.DefaultScope
 
 fun main() {
     val parser = DefaultParser()

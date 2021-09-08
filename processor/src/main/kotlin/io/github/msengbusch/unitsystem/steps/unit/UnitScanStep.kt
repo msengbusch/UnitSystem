@@ -1,10 +1,10 @@
 package io.github.msengbusch.unitsystem.steps.unit
 
 import io.github.msengbusch.unitsystem.context.Context
+import io.github.msengbusch.unitsystem.old.unit.Unit
 import io.github.msengbusch.unitsystem.step.AnnotationStep
 import io.github.msengbusch.unitsystem.steps.unit.data.RawUnit
 import io.github.msengbusch.unitsystem.steps.unit.data.UnitName
-import io.github.msengbusch.unitsystem.unit.Unit
 import io.github.msengbusch.unitsystem.util.asTypeElement
 import io.github.msengbusch.unitsystem.util.debug
 import javax.lang.model.element.Element

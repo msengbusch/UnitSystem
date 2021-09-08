@@ -1,7 +1,7 @@
 package io.github.msengbusch.unitsystem.steps.event
 
 import io.github.msengbusch.unitsystem.context.Context
-import io.github.msengbusch.unitsystem.event.Event
+import io.github.msengbusch.unitsystem.old.event.Event
 import io.github.msengbusch.unitsystem.step.AnnotationStep
 import io.github.msengbusch.unitsystem.steps.event.data.RawEvent
 import io.github.msengbusch.unitsystem.util.debug

@@ -2,7 +2,7 @@ package io.github.msengbusch.unitsystem.example.unit
 
 import io.github.msengbusch.unitsystem.example.event.UnitCycle
 import io.github.msengbusch.unitsystem.example.event.UnitReload
-import io.github.msengbusch.unitsystem.unit.Unit
+import io.github.msengbusch.unitsystem.old.unit.Unit
 import javax.inject.Inject
 
 @Unit("testUnit3")
