@@ -15,17 +15,17 @@ import io.github.msengbusch.unitsystem.util.Name
 import javax.inject.Inject
 
 object UnitScan {
-    fun scanForUnit(resolver: Resolver, logger: KSPLogger): Map<Name, PreUnit> {
+    fun scanForUnit(resolver: Resolver, logger: KSPLogger): Map<ClassName, PreUnit> {
         val units = mutableMapOf<Name, PreUnit>()
 
-        resolver.getSymbolsWithAnnotation(Unit::class.qualifiedName!!).forEach { element ->
+        resolver.getSymbolsWithAnnotation(ValidUnit::class.qualifiedName!!).forEach { element ->
             val unit = processElements(element, logger)
 
             if (units.contains(unit.name)) {
                 throw AlreadyExistingException("$unit has the same name as unit from class ${units[unit.name]!!.className}")
             }
 
-            units[unit.name] = unit
+            units[unit.className] = unit
 
             logger.info("Found $unit", element)
         }
@@ -34,7 +34,7 @@ object UnitScan {
     }
 
     @OptIn(KspExperimental::class)
-    fun processElements(element: KSAnnotated, logger: KSPLogger): PreUnit {
+    private fun processElements(element: KSAnnotated, logger: KSPLogger): PreUnit {
         if (element !is KSClassDeclaration) {
             throw IllegalAnnotationException("@Unit can't be applied to $element: must be a class")
         }
@@ -54,7 +54,7 @@ object UnitScan {
         val className: ClassName = element.qualifiedName!!.asString()
         val name: Name = annotation.name
 
-        val unique: Boolean = annotation.unique
+        val isComponent: Boolean = annotation.component
         val inheritable: Boolean = annotation.inheritable
 
         val before: List<Name> = annotation.before.toList()
@@ -83,6 +83,16 @@ object UnitScan {
             parameters = emptyList()
         }
 
-        return PreUnit(name, className, before, after, parentClasses, parameters, unique, inheritable, isInstanciable)
+        return PreUnit(
+            name,
+            className,
+            before,
+            after,
+            parentClasses,
+            parameters,
+            isComponent,
+            inheritable,
+            isInstanciable
+        )
     }
 }

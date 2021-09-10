@@ -5,7 +5,7 @@ import io.github.msengbusch.unitsystem.unit.Container
 import io.github.msengbusch.unitsystem.unit.Unit
 import javax.inject.Inject
 
-@Unit("component", unique = false)
+@Unit("component", component = true)
 class ComponentUnit @Inject constructor(
     @FromInheriting private val inheritingContainer: Container<*>,
     private val extensionUnit: ExtensionUnit

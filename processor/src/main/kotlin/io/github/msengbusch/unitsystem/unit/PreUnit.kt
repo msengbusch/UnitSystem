@@ -7,6 +7,6 @@ import io.github.msengbusch.unitsystem.util.Name
 
 data class PreUnit(
     val name: Name, val className: ClassName, val before: List<Name>, val after: List<Name>,
-    val parentClasses: List<KSTypeReference>, val constructorParams: List<KSValueParameter>, val isUnique: Boolean,
+    val parentClasses: List<KSTypeReference>, val constructorParams: List<KSValueParameter>, val isComponent: Boolean,
     val isInheritable: Boolean, val isInstanciable: Boolean
 )
