@@ -3,10 +3,7 @@ package io.github.msengbusch.unitsystem.unit
 import com.google.devtools.ksp.*
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSTypeReference
-import com.google.devtools.ksp.symbol.KSValueParameter
+import com.google.devtools.ksp.symbol.*
 import io.github.msengbusch.unitsystem.exception.AlreadyExistingException
 import io.github.msengbusch.unitsystem.exception.IllegalAnnotationException
 import io.github.msengbusch.unitsystem.exception.MissingAnnotationException
@@ -53,6 +50,7 @@ object UnitScan {
 
         val className: ClassName = element.qualifiedName!!.asString()
         val name: Name = annotation.name
+        val file: KSFile = element.containingFile!!
 
         val isComponent: Boolean = annotation.component
         val inheritable: Boolean = annotation.inheritable
@@ -84,6 +82,7 @@ object UnitScan {
         }
 
         return PreUnit(
+            file,
             name,
             className,
             before,

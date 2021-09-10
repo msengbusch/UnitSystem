@@ -6,16 +6,15 @@ import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import io.github.msengbusch.unitsystem.exception.NotExistingException
 import io.github.msengbusch.unitsystem.util.ClassName
-import io.github.msengbusch.unitsystem.util.Name
 
 object UnitValidate {
-    fun validateUnits(preUnits: Map<ClassName, PreUnit>, logger: KSPLogger): Map<Name, ValidUnit> {
-        return preUnits.map { (name, preUnit) ->
+    fun validateUnits(preUnits: Map<ClassName, PreUnit>, logger: KSPLogger): Map<ClassName, ValidUnit> {
+        return preUnits.map { (className, preUnit) ->
             val unit = processUnit(preUnit, preUnits, logger)
 
             logger.info("Validated $unit")
 
-            Pair(name, unit)
+            Pair(className, unit)
         }.toMap()
     }
 
