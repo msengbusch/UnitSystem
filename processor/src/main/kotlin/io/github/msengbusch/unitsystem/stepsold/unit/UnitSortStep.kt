@@ -1,9 +1,8 @@
-package io.github.msengbusch.unitsystem.steps.unit
+package io.github.msengbusch.unitsystem.stepsold.unit
 
 import io.github.msengbusch.unitsystem.context.Context
 import io.github.msengbusch.unitsystem.step.Step
-import io.github.msengbusch.unitsystem.steps.unit.data.UnitName
-import io.github.msengbusch.unitsystem.steps.unit.data.ValidUnit
+import io.github.msengbusch.unitsystem.stepsold.unit.data.ValidUnit
 import io.github.msengbusch.unitsystem.util.GraphNode
 import io.github.msengbusch.unitsystem.util.TopologicalSort
 import io.github.msengbusch.unitsystem.util.debug
@@ -31,6 +30,6 @@ class UnitSortStep : Step {
         val sorted = TopologicalSort.topologicalSort(graph.values.toList())
         units.addAll(sorted.map { node -> validUnits[node.id]!! })
 
-        context.debug("Sorted units: ${sorted.joinToString() { it.id }}")
+        context.debug("Sorted units: ${sorted.joinToString { it.id }}")
     }
 }

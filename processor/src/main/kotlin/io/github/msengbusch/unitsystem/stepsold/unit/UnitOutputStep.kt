@@ -1,8 +1,8 @@
-package io.github.msengbusch.unitsystem.steps.unit
+package io.github.msengbusch.unitsystem.stepsold.unit
 
 import io.github.msengbusch.unitsystem.context.Context
 import io.github.msengbusch.unitsystem.step.Step
-import io.github.msengbusch.unitsystem.steps.event.EventScanStep
+import io.github.msengbusch.unitsystem.stepsold.event.EventScanStep
 import io.github.msengbusch.unitsystem.util.writeToResource
 
 class UnitOutputStep : Step {

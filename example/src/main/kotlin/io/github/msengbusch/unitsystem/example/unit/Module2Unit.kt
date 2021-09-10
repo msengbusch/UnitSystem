@@ -1,21 +1,15 @@
 package io.github.msengbusch.unitsystem.example.unit
 
-import io.github.msengbusch.unitsystem.example.event.UnitCycle
-import io.github.msengbusch.unitsystem.old.unit.Unit
+import io.github.msengbusch.unitsystem.unit.Unit
 import javax.inject.Inject
 
-@Unit("testUnit2", before = ["testUnit4"], after = ["testUnit3"])
-class TestUnit2 @Inject constructor() : List<String>, UnitCycle {
-    override fun enable() {
-        println("Test unit 2 enable")
-    }
-
-    override fun disable() {
-        println("Test unit 2 disable")
-    }
+@Unit("module2")
+class Module2Unit @Inject constructor(val module: ModuleUnit, val component: ComponentUnit) : ExtensionUnit,
+    List<String> {
+    override val name: String = "Module2"
 
     override val size: Int
-        get() = TODO("Not yet implemented")
+        get() = 0
 
     override fun contains(element: String): Boolean {
         TODO("Not yet implemented")
@@ -56,4 +50,5 @@ class TestUnit2 @Inject constructor() : List<String>, UnitCycle {
     override fun subList(fromIndex: Int, toIndex: Int): List<String> {
         TODO("Not yet implemented")
     }
+
 }

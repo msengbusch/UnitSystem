@@ -1,14 +1,18 @@
 package io.github.msengbusch.unitsystem.util
 
-import javax.lang.model.element.Element
-import javax.lang.model.element.TypeElement
-import javax.lang.model.type.DeclaredType
-import javax.lang.model.type.TypeMirror
+/*
+fun Element.asTypeElement(): TypeElement {
+    return (this as TypeElement)
+}
+
+fun Element.asExecutableElement(): ExecutableElement {
+    return (this as ExecutableElement)
+}
 
 fun TypeMirror.asElement(): Element {
     return (this as DeclaredType).asElement()
 }
 
 fun TypeMirror.asTypeElement(): TypeElement {
-    return asElement() as TypeElement
-}
+    return asElement().asTypeElement()
+}*/

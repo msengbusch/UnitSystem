@@ -1,10 +1,4 @@
-plugins {
-    `config-kapt`
-}
-
 dependencies {
     implementation(projects.api)
-    implementation("com.google.auto.service:auto-service:1.0")
-
-    kapt("com.google.auto.service:auto-service:1.0")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.5.30-1.0.0")
 }

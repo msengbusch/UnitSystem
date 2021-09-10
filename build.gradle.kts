@@ -35,6 +35,7 @@ allprojects {
 
         withType<KotlinCompile> {
             kotlinOptions.javaParameters = true
+            kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
             targetCompatibility = JavaVersion.VERSION_16.toString()
             sourceCompatibility = JavaVersion.VERSION_16.toString()
         }

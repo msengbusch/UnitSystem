@@ -1,15 +1,9 @@
 plugins {
-    `config-kapt`
+    id("com.google.devtools.ksp") version "1.5.30-1.0.0"
 }
 
 dependencies {
     implementation(projects.unitSystem)
 
-    kapt(projects.processor)
-}
-
-tasks {
-    named("processResources") {
-        dependsOn(named("kaptKotlin"))
-    }
+    ksp(projects.processor)
 }

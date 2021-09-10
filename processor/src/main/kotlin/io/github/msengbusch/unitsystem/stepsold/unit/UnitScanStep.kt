@@ -1,11 +1,10 @@
-package io.github.msengbusch.unitsystem.steps.unit
+package io.github.msengbusch.unitsystem.stepsold.unit
 
 import io.github.msengbusch.unitsystem.context.Context
 import io.github.msengbusch.unitsystem.old.unit.Unit
 import io.github.msengbusch.unitsystem.step.AnnotationStep
-import io.github.msengbusch.unitsystem.steps.unit.data.RawUnit
-import io.github.msengbusch.unitsystem.steps.unit.data.UnitName
-import io.github.msengbusch.unitsystem.util.asTypeElement
+import io.github.msengbusch.unitsystem.stepsold.unit.data.RawUnit
+import io.github.msengbusch.unitsystem.stepsold.unit.data.UnitName
 import io.github.msengbusch.unitsystem.util.debug
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -23,7 +22,7 @@ class UnitScanStep : AnnotationStep<Unit> {
         val className = type.qualifiedName.toString()
         val name = annotation.name
 
-        if(units.containsKey(name)) {
+        if (units.containsKey(name)) {
             throw IllegalArgumentException("Unit $className of name $name is already registered as ${units[name]!!.className}")
         }
 
@@ -32,13 +31,13 @@ class UnitScanStep : AnnotationStep<Unit> {
 
         val parentClassNames = mutableListOf<String>()
 
-        val superClassType = type.superclass?.asTypeElement()
-        val superClassName = superClassType?.qualifiedName.toString()
-        if(superClassType != null && superClassName != "java.lang.Object") {
-            parentClassNames.add(superClassName)
-        }
+        //val superClassType = type.superclass?.asTypeElement()
+        //val superClassName = superClassType?.qualifiedName.toString()
+        //if(superClassType != null && superClassName != "java.lang.Object") {
+        //    parentClassNames.add(superClassName)
+        //}
 
-        parentClassNames.addAll(type.interfaces.map { it.asTypeElement().qualifiedName.toString() })
+        //parentClassNames.addAll(type.interfaces.map { it.asTypeElement().qualifiedName.toString() })
 
         val unit = RawUnit(name, className, before, after, parentClassNames)
         units[name] = unit
