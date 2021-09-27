@@ -1,9 +1,9 @@
 package io.github.msengbusch.unitsystem.example.unit
 
-import io.github.msengbusch.unitsystem.unit.Unit
+import io.github.msengbusch.unitsystem.unit.Module
 import javax.inject.Inject
 
-@Unit("module2")
+@Module
 class Module2Unit @Inject constructor(val module: ModuleUnit, val component: ComponentUnit) : ExtensionUnit,
     List<String> {
     override val name: String = "Module2"

@@ -1,7 +1,6 @@
 package io.github.msengbusch.unitsystem.unit
 
 import com.google.devtools.ksp.KspExperimental
-import com.google.devtools.ksp.isAnnotationPresent
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import io.github.msengbusch.unitsystem.exception.NotExistingException
@@ -31,15 +30,19 @@ object UnitValidate {
         }
 
         val inherited = preUnit.parentClasses
-            .filter { it.isAnnotationPresent(Unit::class) }
+            .filter {
+                it.annotations.find { annotation -> annotation.shortName.asString() == "Unit" } != null
+            }
             .map {
-                val className = (it.resolve() as KSClassDeclaration).qualifiedName!!.asString()
+                val className = (it.parent as KSClassDeclaration).qualifiedName!!.asString()
                 preUnits[className]
                     ?: throw NotExistingException("$preUnit inherits $className which is annotated as @Unit which wasn't found during scan")
             }
 
         val components = preUnit.constructorParams
-            .filter { it.type.isAnnotationPresent(Unit::class) }
+            .filter {
+                it.annotations.find { annotation -> annotation.shortName.asString() == "Unit" } != null
+            }
             .map {
                 val typeClassName = (it.type.resolve() as KSClassDeclaration).qualifiedName!!.asString()
 

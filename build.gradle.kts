@@ -1,9 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
-
-    `config-kapt`
+    kotlin("jvm") version "1.5.31"
+    id("com.github.ben-manes.versions") version "0.39.0"
 }
 
 val buildRelease: Provider<String> = providers.environmentVariable("BUILD_RELEASE").forUseAtConfigurationTime()
@@ -36,42 +35,20 @@ allprojects {
         withType<KotlinCompile> {
             kotlinOptions.javaParameters = true
             kotlinOptions.freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-            targetCompatibility = JavaVersion.VERSION_16.toString()
-            sourceCompatibility = JavaVersion.VERSION_16.toString()
         }
 
         named<Jar>("jar") {
             archiveClassifier.set("dev")
         }
     }
-
-    kotlin {
-        kotlinDaemonJvmArgs = listOf(
-            "-Dfile.encoding=UTF-8",
-            "--show-version",
-            "--enable-preview",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-            "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
-        )
-    }
 }
 
 dependencies {
     api(projects.api)
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.8.0")
     testImplementation("org.assertj:assertj-core:3.20.2")
-
-    kaptTest(projects.processor)
 }
 
 tasks {

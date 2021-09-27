@@ -1,36 +1,30 @@
 package io.github.msengbusch.unitsystem.unit
 
-import com.google.devtools.ksp.*
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.symbol.*
-import io.github.msengbusch.unitsystem.exception.AlreadyExistingException
-import io.github.msengbusch.unitsystem.exception.IllegalAnnotationException
-import io.github.msengbusch.unitsystem.exception.MissingAnnotationException
 import io.github.msengbusch.unitsystem.util.ClassName
 import io.github.msengbusch.unitsystem.util.Name
-import javax.inject.Inject
 
 object UnitScan {
     fun scanForUnit(resolver: Resolver, logger: KSPLogger): Map<ClassName, PreUnit> {
         val units = mutableMapOf<Name, PreUnit>()
 
-        resolver.getSymbolsWithAnnotation(ValidUnit::class.qualifiedName!!).forEach { element ->
-            val unit = processElements(element, logger)
+        resolver.getSymbolsWithAnnotation(Unit::class.qualifiedName!!).forEach { element ->
+            //val unit = processElements(element, logger)
 
-            if (units.contains(unit.name)) {
-                throw AlreadyExistingException("$unit has the same name as unit from class ${units[unit.name]!!.className}")
-            }
+            //if (units.contains(unit.name)) {
+            //    throw AlreadyExistingException("$unit has the same name as unit from class ${units[unit.name]!!.className}")
+            //}
 
-            units[unit.className] = unit
+            //units[unit.className] = unit
 
-            logger.info("Found $unit", element)
+            //logger.info("Found $unit", element)
         }
 
         return units
     }
 
-    @OptIn(KspExperimental::class)
+    /*@OptIn(KspExperimental::class)
     private fun processElements(element: KSAnnotated, logger: KSPLogger): PreUnit {
         if (element !is KSClassDeclaration) {
             throw IllegalAnnotationException("@Unit can't be applied to $element: must be a class")
@@ -93,5 +87,5 @@ object UnitScan {
             inheritable,
             isInstanciable
         )
-    }
+    }*/
 }

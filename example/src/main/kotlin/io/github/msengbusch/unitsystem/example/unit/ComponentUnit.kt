@@ -1,22 +1,26 @@
 package io.github.msengbusch.unitsystem.example.unit
 
-import io.github.msengbusch.unitsystem.scope.identifier.FromInheriting
+import io.github.msengbusch.unitsystem.scope.identifier.FromModule
+import io.github.msengbusch.unitsystem.unit.Component
 import io.github.msengbusch.unitsystem.unit.Container
-import io.github.msengbusch.unitsystem.unit.Unit
 import javax.inject.Inject
 
-@Unit("component", component = true)
+@Component
 class ComponentUnit @Inject constructor(
-    @FromInheriting private val inheritingContainer: Container<*>,
+    @FromModule private val container: Container<*>,
     private val extensionUnit: ExtensionUnit
-) : Extension2Unit {
+) : Extension2 {
     override fun enable() {
         println("Enable component extension for ${extensionUnit.name}")
-        println("Enable component for ${inheritingContainer.name}")
+        println("Enable component for ${container.name}")
     }
 
     override fun disable() {
         println("Disable component extension for ${extensionUnit.name}")
-        println("Disable component for ${inheritingContainer.name}")
+        println("Disable component for ${container.name}")
+    }
+
+    fun ejpwe() {
+
     }
 }
