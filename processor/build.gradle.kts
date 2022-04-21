@@ -1,4 +1,4 @@
 dependencies {
     implementation(projects.api)
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.5.31-1.0.0")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.21-1.0.5")
 }
